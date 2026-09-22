@@ -25,7 +25,7 @@ contains the answer.
 **Why this target:**
 <!-- e.g. "One of my questions is about a topic only two documents mention, so
      I expect that one to be hard." -->
-
+I chose 4 of 5 because one of my questions may be harder to retrieve than the others, while the other four should have relevant information in the corpus.
 ---
 
 ## 2. Every answer names a source
@@ -35,6 +35,7 @@ Every answer the system produces names at least one source document.
 **Why this target:**
 <!-- Why all five and not four? What about your setup makes that achievable —
      or what would have to go wrong for it not to be? -->
+I chose every answer because the system is answering questions from a specific corpus, so each answer should be traceable to at least one of the documents it used.
 
 ---
 
@@ -52,6 +53,8 @@ in at least 4 of 5 tries.
 **Why this target:**
 <!-- What did your distances look like when you set the cutoff in Milestone 4?
      Was there a clean gap, or did the two groups overlap? -->
+I chose 4 of 5 because the relevance cutoff may not perfectly separate every out-of-corpus question, but most clearly unrelated questions should still be rejected.
+
 
 ---
 
@@ -68,12 +71,10 @@ in at least 4 of 5 tries.
           sentence cut in half at either end."
        - "No chunk is shorter than 200 characters, since anything below that
           in my corpus turned out to be a heading with no content under it." -->
-
-
+At least 4 of 5 sampled chunks should contain enough context to answer a resonable question that chunk without needing the text before or after it.
 
 **Why this target:**
-
-
+I chose 4 of 5 because my chunks average about 650 characters, but their sizes range from 24 to 800 characters. I want most chunks to be understandable on their own while allowing one chunk to be too short or dependent on surrounding context.
 
 ---
 
@@ -86,12 +87,11 @@ in at least 4 of 5 tries.
      handles badly, about source attribution being correct rather than merely
      present — anything, as long as it names a number or an observable
      outcome. -->
-
+At least 4 of my 5 test answers should contain the expected answer phrase listed for that question in `questions.py`.
 
 
 **Why this target:**
-
-
+I chose 4 of 5 because the expected phrases give me a simple way to check whether the system found the important information, but one answer could still be correct if it uses slightly different wording.
 
 ---
 
