@@ -26,11 +26,12 @@
      this repo.
 
      Milestone 5. -->
+I picked the city_guides corpus, which contains guides about towns, transportation, food, accommodation, accessibility, and other travel information. The system retrieves relevant markdown sections from these guides and uses them to answer specific questions about the region. It is designed to give answers grounded in the documents rather than relying on outside information.
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** 700 Characters
+**Overlap:** 0 Characters
 
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
@@ -41,6 +42,7 @@
      more than pretending you got it right first time.
 
      Milestone 3. -->
+I chose a maximum of about 700 characters because the city guides are organized into sections with markdown headings such as "Getting there," "Getting around," and "Where to stay." I kept the heading with its related content and combined short sections so that chunks would contain enough context to answer questions on their own. I used no overlap because the sections already provide natural boundaries, so repeating text between chunks would add duplication without much benefit.
 
 ## Sample Chunks
 
@@ -127,17 +129,17 @@ Road and the coast road, neither of which has a shoulder.
      visible. Milestone 4. -->
 
 **Question:**
-"Which town is most accesible by foot?"
+What are Brightwater's Tuesday market hours?
 
 **Answer:**
 
 ```
-Thornby Wells is the region's most accessible town on foot, according to **guide_walking.md** (and is also noted as the easiest town in the region in **guide_accessibility.md**).
+Brightwater's Tuesday market sets up at 7am in the square and is finished by 1pm.
 
-Sources retrieved: guide_accessibility.md, guide_corry_vale.md, guide_walking.md
+Source: guide_eating.md
 ```
 
-**My relevance cutoff:**
+**My relevance cutoff:** 0.65
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -151,6 +153,16 @@ Sources retrieved: guide_accessibility.md, guide_corry_vale.md, guide_walking.md
 | Question | In corpus? | Best distance |
 |---|---|---|
 |  |  |  |
+| What are Brightwater's Tuesday market hours? | Yes | 0.279 |
+| Which month is the busiest and makes it harder to find accommodation? | Yes | 0.445 |
+| Which town is the most accessible town by foot? | Yes | 0.451 |
+| When is the best time to buy a train ticket for the cheapest price? | Yes | 0.602 |
+| How long does it take to get from one end to the other in Thornby Wells? | Yes | 0.303 |
+| What is the capital of Mongolia? | No | 0.828 |
+| How do I change the oil in a diesel engine? | No | 0.912 |
+| Who won the 1994 World Cup? | No | 1.000 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.846 |
+| How do I write a for loop in Rust? | No | 0.843 |
 
 ## How I Used AI
 
