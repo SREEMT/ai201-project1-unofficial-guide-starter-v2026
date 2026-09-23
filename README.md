@@ -176,8 +176,14 @@ Source: guide_eating.md
      Milestone 5. -->
 
 **1.**
+I didnt use claude for this since most of my AI usage was not really code. I used ChatGPT to help me clarify some aspects of the assignment and help format some markdown documentation.
+
+It helped me out understand certain concepts better and also sped up documenting everything and formatting it the way I wanted it. Example would be the table above with the distance data for different questions
 
 **2.**
+I also used ChatGPT to help me fine tune my chunker. I actually have a worse version commented out. The one thats implemented was tweaked by ChatGPT to save some time. I just told it to help me make it chunk by markdown headers since my corpus uses markdown files with headers a lot.
+
+It fixed my code and made it more robust than the original. After testing and reviewing the code, I decided to keep it for now. I feel like different chunking methods for different corpus's might be a feature I might add later.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
