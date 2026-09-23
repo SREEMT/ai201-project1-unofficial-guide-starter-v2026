@@ -97,7 +97,182 @@ def split_documents(documents: list[Document]) -> list[Chunk]:
       - Would splitting on paragraph breaks keep more thoughts intact than
         splitting on a character count?
     """
-    return fallback_split(documents)
+    """
+    max_chars = 700
+    chunks: list[Chunk] = []
+    for doc in documents:
+        parts = [part.strip() for part in doc.text.split("\n\n") if part.strip()]
+
+        current_parts: list[str] = []
+        current_length = 0
+        index = 0
+
+        for part in parts:
+            added_length = len(part) if not current_parts else len(part) + 2
+            if current_parts and current_length + added_length > max_chars:
+                chunks.append(
+                    Chunk(
+                        text = "\n\n".join(current_parts),
+                        source = doc.source,
+                        index = index,
+                        produced_by = "chunker.py::split_documents",
+                    )
+                )
+                index += 1
+                current_parts = []
+                current_length = 0
+            current_parts.append(part)
+            current_length += len(part) if current_length == 0 else len(part) + 2
+
+        if current_parts:
+            chunks.append(
+                Chunk(
+                    text = "\n\n".join(current_parts),
+                    source = doc.source,
+                    index = index,
+                    produced_by = "chunker.py::split_documents",
+                )
+            )
+
+    #return fallback_split(documents)
+    return chunks
+    """
+
+    max_chars = 700
+    chunks: list[Chunk] = []
+
+    for doc in documents:
+        lines = doc.text.splitlines()
+
+        # Build sections: each heading stays with the text underneath it.
+        sections: list[str] = []
+        current: list[str] = []
+
+        for line in lines:
+            if line.strip().startswith("#"):
+                if current:
+                    section = "\n".join(current).strip()
+                    if section:
+                        sections.append(section)
+                current = [line]
+            else:
+                current.append(line)
+
+        if current:
+            section = "\n".join(current).strip()
+            if section:
+                sections.append(section)
+
+        index = 0
+        current_parts: list[str] = []
+        current_length = 0
+
+        for section in sections:
+            # Keep very long sections for paragraph-level splitting below.
+            if len(section) > max_chars:
+                # Flush anything already being combined.
+                if current_parts:
+                    chunks.append(
+                        Chunk(
+                            text="\n\n".join(current_parts),
+                            source=doc.source,
+                            index=index,
+                            produced_by="chunker.py::split_documents",
+                        )
+                    )
+                    index += 1
+                    current_parts = []
+                    current_length = 0
+
+                # Split the long section by paragraphs.
+                paragraphs = [
+                    p.strip()
+                    for p in section.split("\n\n")
+                    if p.strip()
+                ]
+
+                long_parts: list[str] = []
+                long_length = 0
+
+                for paragraph in paragraphs:
+                    added = (
+                        len(paragraph)
+                        if not long_parts
+                        else len(paragraph) + 2
+                    )
+
+                    if long_parts and long_length + added > max_chars:
+                        chunks.append(
+                            Chunk(
+                                text="\n\n".join(long_parts),
+                                source=doc.source,
+                                index=index,
+                                produced_by="chunker.py::split_documents",
+                            )
+                        )
+                        index += 1
+                        long_parts = []
+                        long_length = 0
+
+                    long_parts.append(paragraph)
+                    long_length += (
+                        len(paragraph)
+                        if long_length == 0
+                        else len(paragraph) + 2
+                    )
+
+                if long_parts:
+                    chunks.append(
+                        Chunk(
+                            text="\n\n".join(long_parts),
+                            source=doc.source,
+                            index=index,
+                            produced_by="chunker.py::split_documents",
+                        )
+                    )
+                    index += 1
+
+                continue
+
+            # Combine short sections so we don't create tiny chunks.
+            added = (
+                len(section)
+                if not current_parts
+                else len(section) + 2
+            )
+
+            if current_parts and current_length + added > max_chars:
+                chunks.append(
+                    Chunk(
+                        text="\n\n".join(current_parts),
+                        source=doc.source,
+                        index=index,
+                        produced_by="chunker.py::split_documents",
+                    )
+                )
+                index += 1
+                current_parts = []
+                current_length = 0
+
+            current_parts.append(section)
+            current_length += (
+                len(section)
+                if current_length == 0
+                else len(section) + 2
+            )
+
+        # Flush the final combined chunk.
+        if current_parts:
+            chunks.append(
+                Chunk(
+                    text="\n\n".join(current_parts),
+                    source=doc.source,
+                    index=index,
+                    produced_by="chunker.py::split_documents",
+                )
+            )
+
+    return chunks
 
 
 def describe(chunks: list[Chunk]) -> str:

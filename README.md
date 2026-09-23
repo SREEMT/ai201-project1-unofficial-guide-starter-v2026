@@ -53,29 +53,72 @@
 
      Milestone 3. -->
 
-**Chunk 1** — source: `` — produced by: ``
+**Chunk 1** — source: `guide_accessibility.md#0` — produced by: `chunker.py::split_documents`
 
 ```
+
+# Getting around the region with limited mobility
+
+An honest assessment rather than a promotional one. Some of these places are
+difficult and it is better to know in advance.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: `guide_corry_vale.md#1` — produced by: `chunker.py::split_documents`
 
 ```
+
+## Getting around
+
+Nothing within the valley is walkable from anything else — the villages are two to four miles apart. There is one taxi, based in the largest village, and it must be booked a day ahead. Most visitors drive between villages and walk the footpaths in between.
+
+## Eat and drink
+
+One pub in the largest village serves food seven days a week. A second, in the third village, opensThursday to Sunday. There is a farm shop at the valley mouth that sells bread, cheese and little else, and it closes at 4pm. Bring supplies; this is not a place with options.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: `guide_givens_mill.md#0` — produced by: `chunker.py::split_documents`
 
 ```
+
+# Givens Mill
+
+Givens Mill is a village of 700 built around a working watermill that still grinds flour commercially. It is the sort of place people visit for an afternoon and then talk about for longer than the visit lasted.
+
+## Getting there
+
+No station and no bus on Sundays; four buses a day from Brightwater on weekdays, taking 30 minutes.Driving is 20 minutes. The village car park holds about forty cars and is full by 11am on summer Saturdays.
+
+## Getting around
+
+Everything is on one street along the river. The mill is at one end and the church at the other, eight minutes apart. The riverside path continues in both directions for as far as you want to walk.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: `guide_marchwood.md#0` — produced by: `chunker.py::split_documents`
 
 ```
+
+# Marchwood
+
+Marchwood is the regional hub — 180,000 people, the junction everyone changes trains at, and a citymost visitors pass through rather than stop in. That is a mistake, though an understandable one, since almost nothing of interest is near the station.
+
+## Getting there
+
+Every railway line in the region meets here, which is the city's defining feature. Trains to Brightwater run every 40 minutes until 11pm. The airport is 20 minutes out by a dedicated bus that runs every 15 minutes and costs more than the equivalent taxi shared between three people.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: `guide_regional_transport.md#3` — produced by: `chunker.py::split_documents`
 
 ```
+
+## Walking and cycling
+
+The river path from Brightwater runs four miles upstream on a good surface. The
+old railway trackbed from Kestrelford runs six miles on an easy gradient and is
+the best walking in the region for the effort involved. The coastal path from
+Halden Bay is more serious — exposed, and closed in high wind.
+
+Cycling is pleasant on the river path and the trackbed, and unpleasant on Mill
+Road and the coast road, neither of which has a shoulder.
 ```
 
 ## Sample Answer
@@ -84,10 +127,14 @@
      visible. Milestone 4. -->
 
 **Question:**
+"Which town is most accesible by foot?"
 
 **Answer:**
 
 ```
+Thornby Wells is the region's most accessible town on foot, according to **guide_walking.md** (and is also noted as the easiest town in the region in **guide_accessibility.md**).
+
+Sources retrieved: guide_accessibility.md, guide_corry_vale.md, guide_walking.md
 ```
 
 **My relevance cutoff:**
