@@ -5,6 +5,8 @@ Run your test questions repeatedly and write the results down.
     python run_eval.py                 three runs, the default
     python run_eval.py --runs 5        more runs
     python run_eval.py --label after   name this run, e.g. before/after a fix
+    
+    python run_eval.py --corpus NAME    can also change in config, preffered
 
 This does the mechanical half of unit 2 for you: it asks each of your questions
 the same way three separate times, with caching turned off so you get three
