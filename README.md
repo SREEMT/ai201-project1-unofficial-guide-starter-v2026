@@ -185,6 +185,10 @@ I also used ChatGPT to help me fine tune my chunker. I actually have a worse ver
 
 It fixed my code and made it more robust than the original. After testing and reviewing the code, I decided to keep it for now. I feel like different chunking methods for different corpus's might be a feature I might add later.
 
+**Unit 2**
+**3**
+I used AI to help me format any documentation like usual and also see if any of my assumptions are on the right track. This is especially true when trying to analyze my criteria.
+
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
      claims earns nothing.
@@ -513,17 +517,35 @@ at 2/5, and the gate stayed at 5/5.
 
 ## What's Still Broken
 
-<!-- For each criterion still missed after your fix: what you'd do about it,
-     and why you stopped where you did.
+**Criterion 2 — source citations:** This still missed the 5/5 target; all
+three after-runs named a source in only 4/5 answers. The train-ticket answer
+never cites a source because its evidence was not retrieved, and the other
+answers show that relying on the model to follow the citation instruction is
+not fully reliable. I would improve retrieval for the railway question and
+then enforce a source citation in the answer format, checking that cited
+filenames come from the retrieved chunks. I stopped after changing `TOP_K`
+because this milestone required measuring one change at a time; adding a
+citation rule or another retrieval change now would make it unclear which
+change caused any difference.
 
-     "I ran out of time" is fine if it's true. Pretending nothing is left is
-     not.
-
-     Milestone 5. -->
+**Criterion 5 — expected answer phrase:** This stayed at 2/5 in every
+after-run, below the 4/5 target. The train-ticket fact was still missing from
+the retrieved chunks, and the accommodation answer still failed to use
+retrieved evidence about September. I would first make retrieval surface the
+railway advice, then inspect the generated answer for the accommodation
+question. I would also revise the scorer so it accepts clearly equivalent
+wording for the market hours instead of requiring the literal phrase
+`"7am to 1pm"` when the answer says “from 7am ... finished by 1pm.” I stopped
+after the single top-k experiment to keep the before/after comparison
+interpretable; the remaining retrieval and generation changes need their own
+run and evidence.
 
 ## What I'd Do Differently
 
-<!-- Knowing what you know now — which of your five criteria would you write
-     differently, and why?
-
-     Milestone 5. -->
+I would rewrite criterion 5 to test whether each answer conveys the expected
+fact, using a small set of acceptable answer variants (for example, both
+“7am to 1pm” and “from 7am ... finished by 1pm”) rather than requiring one
+exact substring. The current phrasing check counted a correct market-hours
+answer as wrong, so it measured wording overlap as well as answer correctness.
+I would keep a numerical target and define the accepted variants before
+running the evaluation so the measurement remains clear and consistent.
