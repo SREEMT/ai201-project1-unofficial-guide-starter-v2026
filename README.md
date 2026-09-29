@@ -440,34 +440,76 @@ target unchanged for this run rather than lowering it after seeing the result.
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** I increased `config.py::TOP_K` from 5 to 8 so retrieval
+would pass more candidate chunks to generation.
 
-**Why I picked it:**
+**Why I picked it:** The cheapest-train-ticket answer was missing because
+`guide_regional_transport.md`, which contains the booking advice, was not in the
+top five retrieved sources; returning more chunks was intended to bring that
+evidence into the prompt.
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
 
 ### Run Log — After
 
-<!-- Same format, same five criteria, three runs each.
-     `python run_eval.py --label after` -->
+Run 1–3 are from [the September 28 after-run log](results/run_2026-09-28_1715_after.md),
+produced by `run_eval.py::main` with `TOP_K = 8` and the same corpus and cutoff
+as the before run. Retrieval and gate measurements are deterministic; criteria
+2 and 5 are based on the generated answers/scorer results.
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 4/5 | 4/5 | 4/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 4/5 | 4/5 | 4/5 | MISSED |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Chunks contain enough context to answer a reasonable question | 4 of 5 | 4/5 | 4/5 | 4/5 | MET |
+| 5. Answers contain the expected answer phrase | 4 of 5 | 2/5 | 2/5 | 2/5 | MISSED |
+
+**Run evidence:** The full raw answers, retrieved-source lists, and gate
+results are in `results/run_2026-09-28_1715_after.md`. In each run the
+train-ticket question still did not retrieve `guide_regional_transport.md`;
+for example, the recorded Run 1 source list is:
+
+```
+Sources retrieved: guide_brightwater.md, guide_eating.md, guide_elder_ness.md, guide_givens_mill.md, guide_kestrelford.md, guide_marchwood.md, guide_pellew_sands.md, guide_seasons.md
+
+I do not have enough information in the provided documents to answer when is the best time to buy a train ticket for the cheapest price.
+```
+
+This actual output was recorded by `run_eval.py::main` after
+`store.py::search` returned the top eight results. The all-question source
+lists show 4/5 questions had their answer source retrieved. The gate output,
+produced by `run_eval.py::check_out_of_scope`, remained:
+
+```
+Produced by run_eval.py::check_out_of_scope, cutoff 0.65. Refused 5 of 5.
+```
+
+Criterion 4 is unchanged because this retrieval setting does not alter
+`chunker.py::split_documents`; the five samples and the 4/5 judgment are the
+same as in the before log. The scorer output from `run_eval.py::main`, using
+`scorer.py::judge`, was:
+
+```
+What are Brightwater's Tuesday market hours? | fail
+Which month is the busiest and makes it harder to find accommodation? | fail
+Which town is the most accessible town by foot? | pass
+When is the best time to buy a train ticket for the cheapest price? | fail
+How long does it take to get from one end to the other in Thornby Wells? | pass
+```
+
+The same marks appeared in all three runs: only the accessible-town and
+Thornby Wells travel-time answers passed (2/5).
 
 **Did it help?**
 
-<!-- Say plainly whether it did, and how you know. If it made things worse,
-     say that — a change that backfired, honestly reported, earns full credit
-     and is more interesting than one that worked. What matters is that you can
-     tell.
-
-     Milestone 4. -->
+Only partially. Source attribution improved from 3/5 to 4/5 in Run 1 and
+stayed at 4/5 in Runs 2 and 3, but it still missed the 5/5 target. The change
+did not fix the intended retrieval miss: `guide_regional_transport.md` was
+still absent from the top eight, and the train-ticket answer remained
+unanswered. Retrieval coverage stayed at 4/5, the expected-phrase score stayed
+at 2/5, and the gate stayed at 5/5.
 
 ## What's Still Broken
 
